@@ -13,7 +13,9 @@ Committed JVM tests:
 - `FileRulesTest`: safe names (including Sinhala/Unicode), traversal protection, categorization, binary size formatting and junk-candidate identification.
 - `VaultCodecTest`: empty/small/multi-record round trips; ciphertext tampering, wrong keys, wrong file identities, truncation, trailing data, incorrect sizes and fresh nonces.
 
-**Sandbox checks performed:** Kotlin 1.9.23 + Java 17 standalone execution of 43 file-rule assertions and 13 vault-codec checks passed. XML/YAML and wrapper integrity are checked separately. These standalone checks are not the full Gradle/JUnit suite. The Android build, lint, R8 and UI/device behavior remain unverified until CI/device execution; no APK is supplied as already built.
+**Verified CI execution:** [GitHub Actions run 38996519462](https://github.com/1sudantha2/File-manager/actions/runs/38996519462) succeeded for commit `855f2a79bd8d3e680fdf7b776ac2da6d509fbdb8`, including the Gradle/JUnit suite, Android lint, debug APK assembly and minified release assembly. The debug APK and verification reports are uploaded as run artifacts. Device/UI acceptance checks below have not yet been executed.
+
+**Additional sandbox checks:** Kotlin 1.9.23 + Java 17 standalone execution of 43 file-rule assertions and 13 vault-codec checks passed, along with XML/YAML and wrapper integrity checks.
 
 ## Required device matrix
 

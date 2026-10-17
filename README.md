@@ -14,7 +14,7 @@ A native Android file manager built with **Kotlin, Jetpack Compose and Material 
 
 The workflow also runs JVM unit tests, Android lint and an R8-optimized release compilation. Release output is unsigned; distribution outside debug/testing requires your own release signing configuration. No signing secrets are included.
 
-> **Verification status:** the Android SDK and Google Maven dependencies are not available in the coding sandbox. An APK has **not** been built or device-tested here. Kotlin 1.9.23/Java 17 standalone checks passed for file rules (43 assertions) and vault cryptography (13 checks). Full dependency resolution, Compose compilation, lint, R8 and device behavior must be confirmed by the included GitHub Actions workflow and the device checklist in [TESTING.md](TESTING.md). This is not a claim of a verified production release.
+> **Verified GitHub Actions build:** [run 38996519462](https://github.com/1sudantha2/File-manager/actions/runs/38996519462) succeeded for commit `855f2a79bd8d3e680fdf7b776ac2da6d509fbdb8`. Gradle JVM tests, `lintDebug`, `assembleDebug` and R8-optimized `assembleRelease` all passed. Download the [debug APK artifact](https://github.com/1sudantha2/File-manager/actions/runs/38996519462/artifacts/12087776282), then unzip it to obtain `app-debug.apk` (GitHub sign-in may be required; artifacts expire according to repository retention). Standalone Kotlin checks also passed: 43 file-rule assertions and 13 vault-codec checks. Device behavior remains unverified; use [TESTING.md](TESTING.md) before a production release.
 
 ## Build locally
 
@@ -83,7 +83,9 @@ Debug APK: `app/build/outputs/apk/debug/app-debug.apk`.
 
 ```text
 .
-├── .github/workflows/build_apk.yml
+├── .github/
+│   ├── workflows/build_apk.yml
+│   └── scripts/run_checked.sh
 ├── .gitignore
 ├── README.md
 ├── TESTING.md
