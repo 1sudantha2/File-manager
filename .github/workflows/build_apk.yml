@@ -19,8 +19,17 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
+        if: ${{ env.ANDROID_HOME == '' && env.ANDROID_SDK_ROOT == '' }}
       - name: Install Android platform
-        run: sdkmanager "platforms;android-35" "build-tools;34.0.0"
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          test -n "$sdk_root"
+          echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+          if [ ! -f "$sdk_root/platforms/android-35/android.jar" ] || [ ! -d "$sdk_root/build-tools/34.0.0" ]; then
+            manager="$sdk_root/cmdline-tools/latest/bin/sdkmanager"
+            bash .github/scripts/run_checked.sh env JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" "$manager" "platforms;android-35" "build-tools;34.0.0"
+          fi
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
@@ -31,9 +40,9 @@ jobs:
           fi
           chmod +x gradlew
       - name: Test, lint and build
-        run: ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace
+        run: bash .github/scripts/run_checked.sh ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace
       - name: Verify optimized release compiles
-        run: ./gradlew assembleRelease --stacktrace
+        run: bash .github/scripts/run_checked.sh ./gradlew assembleRelease --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: file-manager-debug-apk
