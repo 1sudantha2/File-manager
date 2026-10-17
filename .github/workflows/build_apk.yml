@@ -18,8 +18,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Detect preinstalled Android SDK
+        id: android-sdk
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          if [ -d "$sdk_root/cmdline-tools" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "ANDROID_HOME=$sdk_root" >> "$GITHUB_ENV"
+            echo "ANDROID_SDK_ROOT=$sdk_root" >> "$GITHUB_ENV"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: android-actions/setup-android@v3
-        if: ${{ env.ANDROID_HOME == '' && env.ANDROID_SDK_ROOT == '' }}
+        if: steps.android-sdk.outputs.available != 'true' 
       - name: Install Android platform
         shell: bash
         run: |
